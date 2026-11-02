@@ -1,9 +1,9 @@
-import { planas, solidos, objetos, objetosNome } from './dados.js';
+import { planas, solidos, objetos, objetosNome, objetosPlanos } from './dados.js';
 import { config } from './config.js';
 import { criarJogo, virarCarta, esconderErradas, venceu } from './memoria.js';
 import { iniciarCamera } from './camera.js';
 
-const bancos = { planas, solidos, objetos, objetosNome };
+const bancos = { planas, solidos, objetos, objetosNome, objetosPlanos };
 
 const tabuleiro = document.getElementById('tabuleiro');
 const escolha = document.getElementById('escolha');

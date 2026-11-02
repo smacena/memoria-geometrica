@@ -6,5 +6,6 @@ export const config = {
     solidos:     { nome: 'Sólidos geométricos', pares: 5, tempoSegundos: 120 },
     objetos:     { nome: 'Objetos e figuras',   pares: 5, tempoSegundos: 150 },
     objetosNome: { nome: 'Qual é a figura?',    pares: 5, tempoSegundos: 120 },
+    objetosPlanos: { nome: 'Objetos planos', pares: 5, tempoSegundos: 120 },
   },
 };
