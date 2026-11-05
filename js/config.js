@@ -1,6 +1,8 @@
 // Ajuste aqui antes da apresentação.
 // pares = pares por rodada (cartas = pares x 2); tempoSegundos = duração da rodada.
 export const config = {
+    // segundos em que todas as cartas ficam à mostra no início (0 desliga)
+  tempoPreviaSegundos: 5,
   temas: {
     planas:      { nome: 'Figuras planas',      pares: 6, tempoSegundos: 120 },
     solidos:     { nome: 'Sólidos geométricos', pares: 5, tempoSegundos: 120 },

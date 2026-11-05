@@ -16,6 +16,8 @@ const botaoTelaCheia = document.getElementById('tela-cheia');
 
 let jogo, tempoRestante, intervalo;
 let encerrado = true;
+let intervaloPrevia;
+let previa = false;
 
 function atualizarRelogio() {
   relogio.textContent = `⏱ ${tempoRestante}s`;
@@ -61,7 +63,7 @@ function terminar(texto) {
 
 // Único ponto de entrada: toque ou câmera.
 function aoClicar(indice) {
-  if (encerrado) return;
+  if (encerrado || previa) return;
   const resultado = virarCarta(jogo, indice);
   if (resultado === 'ignorada') return;
   desenhar();
@@ -77,6 +79,8 @@ function aoClicar(indice) {
 }
 
 function mostrarEscolha() {
+  clearInterval(intervaloPrevia);
+  previa = false;
   clearInterval(intervalo);
   encerrado = true;
   jogo = null;
@@ -84,6 +88,43 @@ function mostrarEscolha() {
   relogio.textContent = '';
   tabuleiro.hidden = true;
   escolha.hidden = false;
+}
+
+function iniciarRelogio() {
+  clearInterval(intervalo);
+  intervalo = setInterval(() => {
+    tempoRestante--;
+    atualizarRelogio();
+    if (tempoRestante <= 0) terminar('Tempo esgotado!');
+  }, 1000);
+}
+
+function mostrarPrevia() {
+  let restante = config.tempoPreviaSegundos;
+  if (restante <= 0) {
+    iniciarRelogio();
+    return;
+  }
+
+  previa = true;
+  jogo.cartas.forEach((c) => { c.virada = true; });
+  desenhar();
+  mensagem.textContent = `Memorize! As cartas se escondem em ${restante}s`;
+
+  clearInterval(intervaloPrevia);
+  intervaloPrevia = setInterval(() => {
+    restante--;
+    if (restante > 0) {
+      mensagem.textContent = `Memorize! As cartas se escondem em ${restante}s`;
+      return;
+    }
+    clearInterval(intervaloPrevia);
+    previa = false;
+    jogo.cartas.forEach((c) => { c.virada = false; });
+    mensagem.textContent = '';
+    desenhar();
+    iniciarRelogio();
+  }, 1000);
 }
 
 function iniciar(tema) {
@@ -98,6 +139,7 @@ function iniciar(tema) {
   }
 
   clearInterval(intervalo);
+  clearInterval(intervaloPrevia);
   jogo = novoJogo;
   tempoRestante = tempoSegundos;
   encerrado = false;
@@ -106,11 +148,7 @@ function iniciar(tema) {
   tabuleiro.hidden = false;
   atualizarRelogio();
   desenhar();
-  intervalo = setInterval(() => {
-    tempoRestante--;
-    atualizarRelogio();
-    if (tempoRestante <= 0) terminar('Tempo esgotado!');
-  }, 1000);
+  mostrarPrevia();
 }
 
 // Botões de tema, criados a partir do config
